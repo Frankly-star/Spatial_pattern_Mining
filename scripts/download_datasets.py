@@ -39,16 +39,19 @@ def download_foursquare_data():
         
         output_file = os.path.join(datasets_dir, f"{table_name}.parquet")
 
-        print(f"Fetching data from '{table_name}' using Polars...")
+        print(f"Fetching data from '{table_name}' using PyIceberg & PyArrow...")
         
-        # Use Polars lazy scanning from a PyIceberg table
-        df = pl.scan_iceberg(table)
-        
-        # Polars sink_parquet for efficient streaming to disk
-        # Parquet supports nested data unlike CSV
-        df.sink_parquet(output_file)
+        # 1. 使用 PyIceberg 扫描表并获取 Arrow 数据流
+        # scan() 会自动处理 Foursquare Catalog 返回的 S3 临时凭证
+        scanner = table.scan()
+        arrow_table = scanner.to_arrow()
+
+        # 2. 将内容存入 Parquet
+        import pyarrow.parquet as pq
+        pq.write_table(arrow_table, output_file)
         
         print(f"\nSuccessfully saved to {output_file}")
+        print(f"Total rows: {len(arrow_table)}")
                     
     except Exception as e:
         print(f"An error occurred: {e}")
