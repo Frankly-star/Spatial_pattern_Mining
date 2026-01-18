@@ -1,43 +1,43 @@
 import pandas as pd
 import os
 
-def convert_foursquare_parquet_to_csv(input_path, output_path):
-    print(f"Reading {input_path}...")
-    try:
-        # 读取 Parquet 文件
-        df = pd.read_parquet(input_path)
-        
-        # 1. 保存原始转换后的全量 CSV
-        full_csv = output_path.replace('.csv', '_full.csv')
-        df.to_csv(full_csv, index=False)
-        print(f"Saved full conversion to {full_csv}")
-        
-        # 2. 提取唯一的地点信息并规范化 (与 NYC/TKY, Gowalla 格式一致)
-        print("Normalizing unique venues...")
-        v1 = df[['id_1', 'categories_1', 'latitude_1', 'longitude_1']].rename(
-            columns={'id_1': 'venueId', 'categories_1': 'venueCategory', 'latitude_1': 'latitude', 'longitude_1': 'longitude'}
-        )
-        v2 = df[['id_2', 'categories_2', 'latitude_2', 'longitude_2']].rename(
-            columns={'id_2': 'venueId', 'categories_2': 'venueCategory', 'latitude_2': 'latitude', 'longitude_2': 'longitude'}
-        )
-        
-        df_norm = pd.concat([v1, v2], ignore_index=True)
-        df_norm = df_norm.drop_duplicates(subset=['venueId'])
-        df_norm = df_norm.sort_values(by=['venueId'])
-        
-        df_norm.to_csv(output_path, index=False)
-        print(f"Saved normalized Foursquare CSV to {output_path}")
-        print(f"Original pairs: {len(df)}, Unique venues: {len(df_norm)}")
-        
-    except Exception as e:
-        print(f"Error: {e}")
+def normalize_foursquare():
+    # 1. 定义路径
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    input_file = os.path.join(base_dir, 'datasets', 'foursquare.csv')
+
+    if not os.path.exists(input_file):
+        print(f"Error: {input_file} not found.")
+        return
+
+    # 2. 读取数据
+    print(f"Reading {input_file}...")
+    df = pd.read_csv(input_file)
+    print(f"Initial row count: {len(df)}")
+
+    # 3. 去掉存在 nan 的行
+    print("Removing rows with NaN values...")
+    df = df.dropna().reset_index(drop=True)
+    print(f"Row count after removing NaNs: {len(df)}")
+
+    # 4. 保证 venueId 从 0 开始并且连续
+    print("Reindexing venueId...")
+    unique_venues = sorted(df['venueId'].unique())
+    venue_map = {old_id: new_id for new_id, old_id in enumerate(unique_venues)}
+    df['venueId'] = df['venueId'].map(venue_map).astype(int)
+
+    # 5. 保证 venueCategoryId 从 0 开始并且连续
+    print("Reindexing venueCategoryId...")
+    unique_categories = sorted(df['venueCategoryId'].unique())
+    cat_map = {old_id: new_id for new_id, old_id in enumerate(unique_categories)}
+    df['venueCategoryId'] = df['venueCategoryId'].map(cat_map).astype(int)
+
+    # 6. 保存结果
+    df.to_csv(input_file, index=False)
+    print(f"Successfully processed and saved to {input_file}")
+    print(f"Final records: {len(df)}")
+    print(f"Total Unique Venues: {len(unique_venues)}")
+    print(f"Total Unique Categories: {len(unique_categories)}")
 
 if __name__ == "__main__":
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    input_file = os.path.join(base_dir, 'datasets', 'Foursquare.parquet')
-    output_file = os.path.join(base_dir, 'datasets', 'Foursquare.csv')
-    
-    if os.path.exists(input_file):
-        convert_foursquare_parquet_to_csv(input_file, output_file)
-    else:
-        print(f"File not found: {input_file}")
+    normalize_foursquare()

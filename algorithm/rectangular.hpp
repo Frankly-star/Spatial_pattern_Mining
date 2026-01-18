@@ -19,6 +19,24 @@ struct Rectangular {
 };
 
 /**
+ * @brief 矩形区域的实例，由四个边界坐标定义 (x_min, y_min, x_max, y_max)
+ */
+struct RectangularRegion : public Rectangular {
+    double x_min, y_min;
+    double x_max, y_max;
+
+    RectangularRegion(double min_x = 0.0, double min_y = 0.0, double max_x = 0.0, double max_y = 0.0)
+        : Rectangular(max_x - min_x, max_y - min_y), x_min(min_x), y_min(min_y), x_max(max_x), y_max(max_y) {}
+
+    bool contains(double px, double py) const {
+        return px >= x_min && px <= x_max && py >= y_min && py <= y_max;
+    }
+
+    double centerX() const { return (x_min + x_max) / 2.0; }
+    double centerY() const { return (y_min + y_max) / 2.0; }
+};
+
+/**
  * @brief Rectangular Sketch S = (a x b, K)
  * K 是一个字典，存储区域内关键字 ID 及其出现次数
  */
@@ -34,18 +52,34 @@ struct RectangularSketch {
     RectangularSketch(const Rectangular& rect, const std::unordered_map<int, int>& dictionary)
         : size(rect), K(dictionary) {}
 
-    /**
-     * @brief 记录一个关键字的出现
-     */
     void addKeyword(int keyword) {
         K[keyword]++;
     }
 
-    /**
-     * @brief 判断 Sketch 是否为空
-     */
     bool isEmpty() const {
         return K.empty();
+    }
+
+    std::string toString() const {
+        std::stringstream ss;
+        ss << size.a << " " << size.b << " " << K.size();
+        for (auto const& [kw, count] : K) {
+            ss << " " << kw << " " << count;
+        }
+        return ss.str();
+    }
+
+    static RectangularSketch fromString(const std::string& s) {
+        std::stringstream ss(s);
+        double a, b;
+        size_t n;
+        if (!(ss >> a >> b >> n)) return RectangularSketch();
+        RectangularSketch sketch(a, b);
+        for (size_t i = 0; i < (int)n; ++i) {
+            int kw, count;
+            if (ss >> kw >> count) sketch.K[kw] = count;
+        }
+        return sketch;
     }
 };
 
@@ -59,11 +93,32 @@ struct RectangularPattern {
     RectangularPattern(double width = 0.0, double height = 0.0) 
         : size(width, height) {}
 
-    /**
-     * @brief 向 Pattern 中添加空间对象
-     */
     void addObject(const SpatialObject& obj) {
         O_P.push_back(obj);
+    }
+
+    std::string toString() const {
+        std::stringstream ss;
+        ss << size.a << " " << size.b << " " << O_P.size() << "\n";
+        for (const auto& obj : O_P) {
+            ss << obj.id << " " << obj.x << " " << obj.y << " " << obj.keyword << "\n";
+        }
+        return ss.str();
+    }
+
+    static RectangularPattern fromString(const std::string& s) {
+        std::stringstream ss(s);
+        double a, b;
+        size_t n;
+        if (!(ss >> a >> b >> n)) return RectangularPattern();
+        RectangularPattern pattern(a, b);
+        for (size_t i = 0; i < (int)n; ++i) {
+            SpatialObject obj;
+            if (ss >> obj.id >> obj.x >> obj.y >> obj.keyword) {
+                pattern.addObject(obj);
+            }
+        }
+        return pattern;
     }
 
     /**
@@ -84,25 +139,30 @@ struct RectangularPattern {
         for (auto const& [kw, ids1] : K1) {
             auto it2 = K2.find(kw);
             if (it2 == K2.end() || it2->second.size() != ids1.size()) return false;
-            if (!canMatchGroup(ids1, it2->second, other, epsilon, 0, 0, 0, 0)) return false;
+            // 抽象 Pattern 默认以几何中心 (a/2, b/2) 为基准
+            if (!canMatchGroup(ids1, it2->second, other, epsilon, size.a / 2, size.b / 2, other.size.a / 2, other.size.b / 2)) return false;
         }
         return true;
     }
 
 protected:
     /**
-     * @brief 核心匹配逻辑：验证存在双射 f
+     * @brief 核心匹配逻辑：验证从该 Pattern 到 other 的对应关系
+     * @param cx1 第一个 Pattern 的对齐中心 (x)
+     * @param cy1 第一个 Pattern 的对齐中心 (y)
+     * @param cx2 第二个 Pattern 的对齐中心 (x)
+     * @param cy2 第二个 Pattern 的对齐中心 (y)
      */
     bool canMatchGroup(const std::vector<int>& ids1, const std::vector<int>& ids2, 
                        const RectangularPattern& other, double eps,
-                       double x1, double y1, double x2, double y2) const {
+                       double cx1, double cy1, double cx2, double cy2) const {
         int n = ids1.size();
         std::vector<std::vector<int>> adj(n);
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
-                // 计算对齐后的相对位移
-                double dx = std::abs((O_P[ids1[i]].x - (x1 + size.a/2)) - (other.O_P[ids2[j]].x - (x2 + other.size.a/2)));
-                double dy = std::abs((O_P[ids1[i]].y - (y1 + size.b/2)) - (other.O_P[ids2[j]].y - (y2 + other.size.b/2)));
+                // 计算对齐后的相对偏移之差
+                double dx = std::abs((O_P[ids1[i]].x - cx1) - (other.O_P[ids2[j]].x - cx2));
+                double dy = std::abs((O_P[ids1[i]].y - cy1) - (other.O_P[ids2[j]].y - cy2));
                 if (dx <= eps && dy <= eps) adj[i].push_back(j);
             }
         }
@@ -130,7 +190,7 @@ protected:
  * @brief Instance 是 Pattern 在数据库中的具体体现
  */
 struct Instance : public RectangularPattern {
-    double x, y; // 实例在数据库中的起始坐标 (左下角)
+    double x, y; // 实例在数据库中的中心坐标
 
     Instance(double width = 0.0, double height = 0.0, double _x = 0.0, double _y = 0.0) 
         : RectangularPattern(width, height), x(_x), y(_y) {}
@@ -151,11 +211,40 @@ struct Instance : public RectangularPattern {
             auto itp = Kp.find(kw);
             if (itp == Kp.end() || itp->second.size() != idsi.size()) return false;
             
-            // 实例匹配：使用自身的 (x, y) 和 Pattern 的默认中心 (0.5a, 0.5b) 进行 Translation 
-            if (!canMatchGroup(idsi, itp->second, pattern, epsilon, x, y, 0, 0)) return false;
+            // 实例匹配：使用自身的中心 (x, y) 和 Pattern 的几何中心 (0.5a, 0.5b) 进行对齐
+            if (!canMatchGroup(idsi, itp->second, pattern, epsilon, x, y, pattern.size.a / 2, pattern.size.b / 2)) return false;
         }
         return true;
     }
+
+    std::string toString() const {
+        std::stringstream ss;
+        ss << x << " " << y << "\n";
+        ss << size.a << " " << size.b << " " << O_P.size() << "\n";
+        for (const auto& obj : O_P) {
+            ss << obj.id << " " << obj.x << " " << obj.y << " " << obj.keyword << "\n";
+        }
+        return ss.str();
+    }
+
 };
+
+/**
+ * @brief 重载流操作符，方便进行 I/O
+ */
+inline std::ostream& operator<<(std::ostream& os, const RectangularSketch& sketch) {
+    os << sketch.toString();
+    return os;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const RectangularPattern& pattern) {
+    os << pattern.toString();
+    return os;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const Instance& inst) {
+    os << inst.toString();
+    return os;
+}
 
 #endif // RECTANGULAR_HPP
