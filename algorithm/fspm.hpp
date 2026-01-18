@@ -36,7 +36,23 @@ inline std::vector<RectangularPattern> fspm(
 
     // 2. 滑动窗口搜索：在 D 中寻找满足 Sketch S 的所有实例 C
     // 对应算法中第一个 While 循环
+    int total_x_steps = (D.x_max - a >= D.x_min) ? (int)((D.x_max - a - D.x_min) / step) + 1 : 0;
+    int current_x_step = 0;
+
     for (double x = D.x_min; x <= D.x_max - a; x += step) {
+        current_x_step++;
+        if (current_x_step % 10 == 0 || current_x_step == total_x_steps) {
+            float progress = (float)current_x_step / total_x_steps;
+            int barWidth = 50;
+            std::cout << "\r[FSPM] Candidate searching: [";
+            int pos = barWidth * progress;
+            for (int i = 0; i < barWidth; ++i) {
+                if (i < pos) std::cout << "=";
+                else if (i == pos) std::cout << ">";
+                else std::cout << " ";
+            }
+            std::cout << "] " << int(progress * 100.0) << " %" << std::flush;
+        }
         // 二分查找筛选出 x 范围内的点 (D.objects 已排序)
         auto it_start = std::lower_bound(D.objects.begin(), D.objects.end(), x, [](const SpatialObject& o, double val) {
             return o.x < val;
@@ -80,12 +96,25 @@ inline std::vector<RectangularPattern> fspm(
         }
     }
 
-    std::cout << "[FSPM] Found " << C.size() << " candidate instances matching the sketch." << std::endl;
+    std::cout << "\n[FSPM] Found " << C.size() << " candidate instances matching the sketch." << std::endl;
 
     // 3. 模式分组与支持度计算
     // 对应算法中第二个 While 循环
     std::vector<bool> processed(C.size(), false);
     for (size_t i = 0; i < C.size(); ++i) {
+        if (i % 10 == 0 || i == C.size() - 1) {
+            float progress = (float)(i + 1) / C.size();
+            int barWidth = 50;
+            std::cout << "\r[FSPM] Pattern grouping:    [";
+            int pos = barWidth * progress;
+            for (int k = 0; k < barWidth; ++k) {
+                if (k < pos) std::cout << "=";
+                else if (k == pos) std::cout << ">";
+                else std::cout << " ";
+            }
+            std::cout << "] " << int(progress * 100.0) << " %" << std::flush;
+        }
+
         if (processed[i]) continue;
 
         // I = pop(C)
@@ -144,6 +173,7 @@ inline std::vector<RectangularPattern> fspm(
             processed[i] = true;
         }
     }
+    std::cout << std::endl;
 
     return R;
 }
