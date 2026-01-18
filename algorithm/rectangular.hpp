@@ -184,6 +184,52 @@ protected:
         }
         return false;
     }
+
+public:
+    /**
+     * @brief 获取从该 Pattern 到另一个 Pattern 的对象映射
+     */
+    bool getMatching(const RectangularPattern& other, double eps, 
+                    double cx1, double cy1, double cx2, double cy2,
+                    std::vector<int>& pToOther) const {
+        if (O_P.size() != other.O_P.size()) return false;
+        pToOther.assign(O_P.size(), -1);
+
+        std::unordered_map<int, std::vector<int>> K1, K2;
+        for (int i = 0; i < (int)O_P.size(); ++i) K1[O_P[i].keyword].push_back(i);
+        for (int i = 0; i < (int)other.O_P.size(); ++i) K2[other.O_P[i].keyword].push_back(i);
+
+        if (K1.size() != K2.size()) return false;
+
+        for (auto const& [kw, ids1] : K1) {
+            auto it2 = K2.find(kw);
+            if (it2 == K2.end() || it2->second.size() != ids1.size()) return false;
+            
+            int n = ids1.size();
+            std::vector<std::vector<int>> adj(n);
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < n; ++j) {
+                    double dx = std::abs((O_P[ids1[i]].x - cx1) - (other.O_P[it2->second[j]].x - cx2));
+                    double dy = std::abs((O_P[ids1[i]].y - cy1) - (other.O_P[it2->second[j]].y - cy2));
+                    if (dx <= eps && dy <= eps) adj[i].push_back(j);
+                }
+            }
+
+            std::vector<int> matchL(n, -1);
+            int count = 0;
+            for (int i = 0; i < n; ++i) {
+                std::vector<bool> vis(n, false);
+                if (dfs(i, adj, vis, matchL)) count++;
+            }
+
+            if (count != n) return false;
+            
+            for (int j = 0; j < n; j++) {
+                pToOther[ids1[matchL[j]]] = it2->second[j];
+            }
+        }
+        return true;
+    }
 };
 
 /**

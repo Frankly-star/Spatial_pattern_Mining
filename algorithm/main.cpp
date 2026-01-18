@@ -1,19 +1,23 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
 #include "dataset.hpp"
 #include "rectangular.hpp"
+#include "fspm.hpp"
 using namespace std;
 
-// 定义全局数据集变量
-vector<SpatialObject> dataset;
-
 int main() {
-    string filePath = "../datasets/Gowalla.csv";
-    if (loadDataset(filePath)) {
-        // 数据已加载到全局变量 dataset 中
-        std::cout << "First venue: " << dataset[0].id << std::endl;
-        double d = getDistance(dataset[0].x, dataset[0].y, 
-                               dataset[1].x, dataset[1].y);
-        std::cout << "Distance: " << d << " kilometers" << std::endl;
+    string filePath = "d:/WORKSPACE/Spatial_pattern_Mining/datasets/Gowalla.csv";
+    Spatial db;
+    
+    if (db.load(filePath)) {
+        
+        RectangularSketch S(1.0, 1.0);
+        S.addKeyword(0); 
+
+        auto results = fspm(db, S, 0.1, 2, 1.0);
+
+        cout << "Found " << results.size() << " frequent patterns." << endl;
     }
     return 0;
 } 

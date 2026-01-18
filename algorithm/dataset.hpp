@@ -34,8 +34,98 @@ struct SpatialObject {
     }
 };
 
-// 全局变量用于存储数据集
-extern std::vector<SpatialObject> dataset;
+// 空间范围和对象集合的封装
+class Spatial {
+public:
+    std::vector<SpatialObject> objects;
+    double x_min, x_max, y_min, y_max;
+
+    Spatial() : x_min(0), x_max(0), y_min(0), y_max(0) {}
+
+    /**
+     * @brief 从 CSV 文件加载数据集
+     * @param filePath CSV 文件的绝对路径
+     * @param hasHeader 是否包含表头，默认为 true
+     * @return 是否加载成功
+     */
+    bool load(const std::string& filePath, bool hasHeader = true) {
+        std::ifstream file(filePath);
+        if (!file.is_open()) {
+            std::cerr << "Error: Could not open file " << filePath << std::endl;
+            return false;
+        }
+
+        objects.clear();
+        std::string line;
+
+        if (hasHeader && std::getline(file, line)) {}
+
+        while (std::getline(file, line)) {
+            if (line.empty()) continue;
+            std::stringstream ss(line);
+            std::string vId, vCatId, latStr, lonStr;
+
+            if (std::getline(ss, vId, ',') &&
+                std::getline(ss, vCatId, ',') &&
+                std::getline(ss, latStr, ',') &&
+                std::getline(ss, lonStr, ',')) {
+                try {
+                    int id = std::stoi(vId);
+                    double lat = std::stod(latStr);
+                    double lon = std::stod(lonStr);
+                    int kw = std::stoi(vCatId); 
+                    objects.emplace_back(id, kw, lat, lon);
+                } catch (...) {}
+            }
+        }
+        file.close();
+
+        if (!objects.empty()) {
+            const double R = 6371.0; 
+            double sumLat = 0;
+            for (const auto& o : objects) sumLat += o.y / R; 
+            double avgLat = sumLat / objects.size();
+            double cosLat = std::cos(avgLat);
+            
+            for (auto& o : objects) o.x *= cosLat;
+
+            x_min = x_max = objects[0].x;
+            y_min = y_max = objects[0].y;
+            for (const auto& o : objects) {
+                x_min = std::min(x_min, o.x);
+                x_max = std::max(x_max, o.x);
+                y_min = std::min(y_min, o.y);
+                y_max = std::max(y_max, o.y);
+            }
+
+            std::sort(objects.begin(), objects.end(), [](const SpatialObject& o1, const SpatialObject& o2) {
+                return o1.x < o2.x;
+            });
+        }
+        std::cout << "Successfully loaded " << objects.size() << " objects." << std::endl;
+        return true;
+    }
+
+    /**
+     * @brief 获取子集 (用于测试或特定区域挖掘)
+     */
+    Spatial getSubset(size_t limit) const {
+        Spatial sub;
+        if (objects.empty()) return sub;
+        size_t n = std::min(limit, objects.size());
+        sub.objects.assign(objects.begin(), objects.begin() + n);
+        
+        sub.x_min = sub.x_max = sub.objects[0].x;
+        sub.y_min = sub.y_max = sub.objects[0].y;
+        for (const auto& o : sub.objects) {
+            sub.x_min = std::min(sub.x_min, o.x);
+            sub.x_max = std::max(sub.x_max, o.x);
+            sub.y_min = std::min(sub.y_min, o.y);
+            sub.y_max = std::max(sub.y_max, o.y);
+        }
+        return sub;
+    }
+};
 
 /**
  * @brief 计算两个空间对象之间的欧几里得距离
@@ -55,71 +145,6 @@ inline double getDistance(double x1, double y1, double x2, double y2) {
     double dx = x1 - x2;
     double dy = y1 - y2;
     return std::sqrt(dx * dx + dy * dy);
-}
-
-/**
- * @brief 从 CSV 文件加载数据集
- * @param filePath CSV 文件的绝对路径
- * @param hasHeader 是否包含表头，默认为 true
- * @return 是否加载成功
- */
-inline bool loadDataset(const std::string& filePath, bool hasHeader = true) {
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open file " << filePath << std::endl;
-        return false;
-    }
-
-    dataset.clear();
-    std::string line;
-
-    // 跳过表头
-    if (hasHeader && std::getline(file, line)) {
-        // 第一行已读取
-    }
-
-    while (std::getline(file, line)) {
-        if (line.empty()) continue;
-        
-        std::stringstream ss(line);
-        std::string vId, vCatId, latStr, lonStr;
-
-        // 假设格式为: venueId,venueCategoryId,latitude,longitude
-        if (std::getline(ss, vId, ',') &&
-            std::getline(ss, vCatId, ',') &&
-            std::getline(ss, latStr, ',') &&
-            std::getline(ss, lonStr, ',')) {
-            
-            try {
-                int id = std::stoi(vId);
-                double lat = std::stod(latStr);
-                double lon = std::stod(lonStr);
-                int kw = std::stoi(vCatId); 
-                dataset.emplace_back(id, kw, lat, lon);
-            } catch (const std::exception& e) {
-                std::cerr << "Error parsing line: " << line << " - " << e.what() << std::endl;
-            }
-        }
-    }
-
-    file.close();
-
-    // 关键修正：对所有点的 x 坐标进行一次性缩放修正
-    if (!dataset.empty()) {
-        const double R = 6371.0; 
-        double sumLat = 0;
-        for (const auto& o : dataset) sumLat += o.y / R; 
-        double avgLat = sumLat / dataset.size();
-        double cosLat = std::cos(avgLat);
-        
-        for (auto& o : dataset) {
-            o.x *= cosLat;
-        }
-        std::cout << "Projection adjusted using cos(avgLat) = " << cosLat << std::endl;
-    }
-
-    std::cout << "Successfully loaded " << dataset.size() << " objects." << std::endl;
-    return true;
 }
 
 #endif // DATASET_HPP
