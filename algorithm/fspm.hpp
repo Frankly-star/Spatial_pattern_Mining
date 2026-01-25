@@ -74,29 +74,67 @@ inline std::vector<RectangularPattern> fspm(
                 }
             }
 
-            // 检查关键字分布 K_I 是否与 Sketch S.K 匹配
-            bool sketchMatch = (K_I.size() == S.K.size());
-            if (sketchMatch) {
-                for (auto const& [kw, count] : S.K) {
-                    auto it = K_I.find(kw);
-                    if (it == K_I.end() || it->second != count) {
-                        sketchMatch = false;
-                        break;
-                    }
+            // 检查关键字分布 K_I 是否满足 Sketch S.K (包含 S.K 中要求的所有关键字及数量)
+            bool sketchMatch = true;
+            for (auto const& [kw, count] : S.K) {
+                auto it = K_I.find(kw);
+                if (it == K_I.end() || it->second < count) {
+                    sketchMatch = false;
+                    break;
                 }
             }
 
             if (sketchMatch) {
-                // 创建实例 I = (rect_I, O_I)
-                // Instance 的中心点用于对齐
-                Instance inst(a, b, rect.centerX(), rect.centerY());
-                inst.O_P = O_I;
-                C.push_back(inst);
+                // 不放回贪心提取：在一个窗口中尽可能提取多个满足 Sketch 的不重叠实例
+                std::vector<bool> used(O_I.size(), false);
+                while (true) {
+                    Instance inst(a, b, rect.centerX(), rect.centerY());
+                    std::vector<size_t> currentAttemptIndices;
+                    bool success = true;
+
+                    for (auto const& [kw, count] : S.K) {
+                        int foundInRange = 0;
+                        for (size_t i = 0; i < O_I.size(); ++i) {
+                            if (!used[i] && O_I[i].keyword == kw) {
+                                // 检查本次实例提取中是否已选中该点
+                                bool alreadyInCurrent = false;
+                                for (size_t idx : currentAttemptIndices) {
+                                    if (idx == i) { alreadyInCurrent = true; break; }
+                                }
+                                if (!alreadyInCurrent) {
+                                    currentAttemptIndices.push_back(i);
+                                    if (++foundInRange == count) break;
+                                }
+                            }
+                        }
+                        if (foundInRange < count) {
+                            success = false;
+                            break;
+                        }
+                    }
+
+                    if (success) {
+                        for (size_t idx : currentAttemptIndices) {
+                            used[idx] = true;
+                            SpatialObject subObj = O_I[idx];
+                            subObj.x -= x;
+                            subObj.y -= y;
+                            inst.O_P.push_back(subObj);
+                        }
+                        C.push_back(inst);
+                    } else {
+                        // 无法再凑齐一个完整的实例，退出当前窗口的提取
+                        break;
+                    }
+                }
             }
         }
     }
 
     std::cout << "\n[FSPM] Found " << C.size() << " candidate instances matching the sketch." << std::endl;
+    // for(const auto& inst : C) {
+    //     std::cout << inst.toString() << std::endl;
+    // }
 
     // 3. 模式分组与支持度计算
     // 对应算法中第二个 While 循环
@@ -141,9 +179,9 @@ inline std::vector<RectangularPattern> fspm(
 
             std::vector<int> mapping;
             // 匹配逻辑：将 P 与 C[k] 进行对齐并检查坐标容差 epsilon
-            // P 是抽象模式，以其几何中心 (a/2, b/2) 为基准
-            // C[k] 是具体实例，以其中心 (C[k].x, C[k].y) 为基准
-            if (P.getMatching(C[k], epsilon, a / 2.0, b / 2.0, C[k].x, C[k].y, mapping)) {
+            // 由于 P.O_P 和 C[k].O_P 均已转换为相对于各自左下角的偏移坐标，
+            // 它们的对齐中心均为 (a/2, b/2)
+            if (P.getMatching(C[k], epsilon, a / 2.0, b / 2.0, a / 2.0, b / 2.0, mapping)) {
                 matchIndices.push_back(k);
                 // 记录映射到的数据库对象 u 的 ID
                 for (size_t j = 0; j < P.O_P.size(); ++j) {
@@ -162,18 +200,25 @@ inline std::vector<RectangularPattern> fspm(
         }
 
         if (isFrequent) {
+            // 将模式中的对象 ID 重置为本地索引 (0, 1, 2...)
+            for (size_t j = 0; j < P.O_P.size(); ++j) {
+                P.O_P[j].id = (int)j;
+            }
             R.push_back(P);
             // C <- C \ I_P
             for (size_t idx : matchIndices) {
                 processed[idx] = true;
             }
-            std::cout << "[FSPM] Pattern found with " << matchIndices.size() << " instances." << std::endl;
+            std::cout << "\n[FSPM] Pattern found with " << matchIndices.size() << " instances." << std::endl;
         } else {
             // 不频繁则继续，只标记当前 i 处理过
             processed[i] = true;
         }
     }
     std::cout << std::endl;
+    for(const auto& pattern : R) {
+        std::cout << pattern.toString() << std::endl;
+    }
 
     return R;
 }

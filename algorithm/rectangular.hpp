@@ -125,7 +125,7 @@ struct RectangularPattern {
      * @brief 判断两个抽象 Pattern 是否匹配 (默认已对齐)
      */
     bool match(const RectangularPattern& other, double epsilon) const {
-        if (std::abs(size.a - other.size.a) == 0 || std::abs(size.b - other.size.b) == 0) {
+        if (std::abs(size.a - other.size.a) > 1e-7 || std::abs(size.b - other.size.b) > 1e-7) {
             return false;
         }
         if (O_P.size() != other.O_P.size()) return false;
@@ -245,7 +245,7 @@ struct Instance : public RectangularPattern {
      * @brief 判断该实例是否为某 Pattern 的 Instance
      */
     bool isInstanceOf(const RectangularPattern& pattern, double epsilon) const {
-        if (std::abs(size.a - pattern.size.a) == 0 || std::abs(size.b - pattern.size.b) == 0) return false;
+        if (std::abs(size.a - pattern.size.a) > 1e-7 || std::abs(size.b - pattern.size.b) > 1e-7) return false;
         if (O_P.size() != pattern.O_P.size()) return false;
 
         std::unordered_map<int, std::vector<int>> Ki, Kp;

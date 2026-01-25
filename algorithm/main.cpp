@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <chrono>
 #include "dataset.hpp"
 #include "rectangular.hpp"
 #include "fspm.hpp"
@@ -12,12 +13,17 @@ int main() {
     
     if (db.load(filePath)) {
         
-        RectangularSketch S(1.0, 1.0);
-        S.addKeyword(0); 
+        RectangularSketch S(1, 1);
+        S.addKeyword(2); 
 
-        auto results = fspm(db, S, 0.1, 2, 1.0);
+        auto start = chrono::high_resolution_clock::now();
+        auto results = fspm(db, S, 0.1, 2, 1);
+        auto end = chrono::high_resolution_clock::now();
+
+        chrono::duration<double> diff = end - start;
 
         cout << "Found " << results.size() << " frequent patterns." << endl;
+        cout << "Time spent: " << diff.count() << " seconds." << endl;
     }
     return 0;
 } 
