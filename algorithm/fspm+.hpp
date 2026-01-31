@@ -697,6 +697,100 @@ namespace fspm_plus {
 
         return R;
     }
+
+    /**
+     * @brief Signature-based Sweep-Line Algorithm with X-axis discretization
+     */
+    inline std::vector<RectangularPattern> signature_sweep_line_x(const Spatial& D, const RectangularSketch& S, double epsilon, int min_freq) {
+        // 1. Get Candidate Instances
+        std::vector<Instance> C = generate_candidates(D, S);
+        std::cout << "\n[Signature Sweep-Line X] Found " << C.size() << " candidate instances." << std::endl;
+
+        double a = S.size.a;
+        double b = S.size.b;
+
+        // --- SIGNATURE GROUPING LOGIC ---
+        
+        // 1. Compute Signatures
+        std::vector<std::vector<int>> signatures(C.size());
+        for(size_t i=0; i < C.size(); ++i) {
+            // OPTIMIZATION: Do NOT sort C[i] in place. Sort a temp structure for calculating signature.
+            // This preserves C[i]'s order (from dataset) which might be optimal for getMatching/memory locality.
+            
+            std::vector<SpatialObject> sortedParams = C[i].O_P;
+            std::sort(sortedParams.begin(), sortedParams.end(), [](const SpatialObject& a, const SpatialObject& b) {
+                if (a.keyword != b.keyword) return a.keyword < b.keyword;
+                if (std::abs(a.x - b.x) > 1e-9) return a.x < b.x; // Primary spatial sort is X
+                if (std::abs(a.y - b.y) > 1e-9) return a.y < b.y;
+                return a.id < b.id;
+            });
+
+            double minX = 1e20;
+            for(const auto& o : sortedParams) if(o.x < minX) minX = o.x;
+
+            signatures[i].reserve(sortedParams.size());
+            for(const auto& o : sortedParams) {
+                double delta = o.x - minX;
+                signatures[i].push_back(static_cast<int>(std::floor(delta / (2.0 * epsilon))));
+            }
+        }
+
+        std::vector<RectangularPattern> R;
+        std::vector<bool> processed(C.size(), false);
+        
+        for (size_t i = 0; i < C.size(); ++i) {
+            if (processed[i]) continue;
+
+            const Instance& I_ref = C[i];
+            RectangularPattern P(a, b);
+            P.O_P = I_ref.O_P; 
+
+            std::vector<std::set<int>> F_set(P.O_P.size());
+            for (size_t j = 0; j < P.O_P.size(); ++j) {
+                F_set[j].insert(P.O_P[j].id);
+            }
+
+            // Grouping with Signature Pruning
+            for (size_t k = i + 1; k < C.size(); ++k) {
+                if (processed[k]) continue;
+
+                // PRUNING START
+                if (signatures[i].size() != signatures[k].size()) continue; 
+                
+                bool sigMatch = true;
+                for (size_t s = 0; s < signatures[i].size(); ++s) {
+                    if (std::abs(signatures[i][s] - signatures[k][s]) > 1) { 
+                        sigMatch = false;
+                        break;
+                    }
+                }
+                if (!sigMatch) continue;
+                // PRUNING END
+
+                std::vector<int> mapping;
+                if (P.getMatching(C[k], epsilon, a / 2.0, b / 2.0, a / 2.0, b / 2.0, mapping)) {
+                    processed[k] = true; 
+                    for (size_t j = 0; j < P.O_P.size(); ++j) {
+                        F_set[j].insert(C[k].O_P[mapping[j]].id);
+                    }
+                }
+            }
+
+            bool isFrequent = true;
+            for (const auto& ids : F_set) {
+                if ((int)ids.size() < min_freq) {
+                    isFrequent = false;
+                    break;
+                }
+            }
+
+            if (isFrequent) {
+                R.push_back(P);
+            }
+        }
+
+        return R;
+    }
 }
 
 #endif // FSPM_PLUS_HPP
