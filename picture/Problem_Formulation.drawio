@@ -1,0 +1,220 @@
+<mxfile host="65bd71144e" scale="5" border="0">
+    <diagram id="problem_formulation_diagram" name="Page-1">
+        <mxGraphModel dx="515" dy="390" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="850" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="dataset_group" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="20" y="60" width="260" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="dataset_border" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;strokeColor=#000000;" parent="dataset_group" vertex="1">
+                    <mxGeometry width="240" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="dataset_label" value="Object Database D" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="dataset_group" vertex="1">
+                    <mxGeometry y="250" width="240" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn1" value="" style="triangle;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="20" y="30" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn1_lbl" value="Park" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="30" y="29" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn2" value="" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="10" y="150" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn2_lbl" value="Shop" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="20" y="149" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn3" value="" style="triangle;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="200" y="200" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn3_lbl" value="Park" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="210" y="199" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn4" value="" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="150" y="10" width="10" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn4_lbl" value="Bar" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="162" y="9" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn5" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="170" y="180" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn5_lbl" value="Rest." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="180" y="179" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn6" value="" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=2;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="220" y="50" width="8" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn6_lbl" value="Cafe" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="230" y="49" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn7" value="" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="30" y="220" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn7_lbl" value="Shop" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="40" y="219" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn8" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="180" y="90" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn8_lbl" value="Hotel" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="190" y="89" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn9" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="50" y="20" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn9_lbl" value="Hotel" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="60" y="19" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dp1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="70" y="150" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dp1_lbl" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;Hotel&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontStyle=1" parent="dataset_group" vertex="1">
+                    <mxGeometry x="80" y="149" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dp2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="150" y="70" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dp2_lbl" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;Hotel&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontStyle=1" parent="dataset_group" vertex="1">
+                    <mxGeometry x="160" y="69" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dp3" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="110" y="100" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dp3_lbl" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;Rest.&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontStyle=1" parent="dataset_group" vertex="1">
+                    <mxGeometry x="120" y="99" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn10" value="" style="shape=doubleEllipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="90" y="200" width="10" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn10_lbl" value="School" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="105" y="199" width="35" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn11" value="" style="triangle;whiteSpace=wrap;html=1;direction=south;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="210" y="120" width="9" height="9" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn11_lbl" value="Hosp." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="220" y="119" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn12" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#000000;strokeColor=none;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="40" y="80" width="10" height="6" as="geometry"/>
+                </mxCell>
+                <mxCell id="dn12_lbl" value="Gym" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;fontColor=#333333;" parent="dataset_group" vertex="1">
+                    <mxGeometry x="52" y="78" width="25" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="shape=xor;whiteSpace=wrap;html=1;fillColor=#000000;" vertex="1" parent="dataset_group">
+                    <mxGeometry x="152" y="10" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" value="" style="shape=flexArrow;endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="300" y="180" as="sourcePoint"/>
+                        <mxPoint x="340" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="sketch_group" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="360" y="90" width="180" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="sketch_rect_vis" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1;" parent="sketch_group" vertex="1">
+                    <mxGeometry width="160" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="dim_a" value="a" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="sketch_group" vertex="1">
+                    <mxGeometry x="50" y="160" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="dim_b" value="b" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="sketch_group" vertex="1">
+                    <mxGeometry x="160" y="70" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="sketch_table" value="Mapping M" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#FFFFFF;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="sketch_group" vertex="1">
+                    <mxGeometry x="20" y="40" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="row1" value="Hotel          2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="sketch_table" vertex="1">
+                    <mxGeometry y="26" width="120" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="row2" value="Rest.           1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="sketch_table" vertex="1">
+                    <mxGeometry y="52" width="120" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="sketch_label" value="Rectangular Sketch S" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="sketch_group" vertex="1">
+                    <mxGeometry y="190" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2" value="" style="shape=flexArrow;endArrow=classic;html=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="550" y="180" as="sourcePoint"/>
+                        <mxPoint x="590" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="pattern_group" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="610" y="90" width="180" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="pattern_rect" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=2;" parent="pattern_group" vertex="1">
+                    <mxGeometry width="160" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="pp1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="pattern_group" vertex="1">
+                    <mxGeometry x="30" y="110" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="pp1_lbl" value="Hotel" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="pattern_group" vertex="1">
+                    <mxGeometry x="40" y="110" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="pp2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="pattern_group" vertex="1">
+                    <mxGeometry x="110" y="30" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="pp2_lbl" value="Hotel" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="pattern_group" vertex="1">
+                    <mxGeometry x="120" y="30" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="pp3" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="pattern_group" vertex="1">
+                    <mxGeometry x="70" y="70" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="pp3_lbl" value="Rest." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="pattern_group" vertex="1">
+                    <mxGeometry x="80" y="70" width="30" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="pattern_label" value="Rectangular Pattern P" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="pattern_group" vertex="1">
+                    <mxGeometry y="190" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3" value="" style="shape=flexArrow;endArrow=classic;html=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="800" y="180" as="sourcePoint"/>
+                        <mxPoint x="840" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="match_group" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="860" y="90" width="180" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="match_rect" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;dashed=1;" parent="match_group" vertex="1">
+                    <mxGeometry width="160" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp1_ghost" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="match_group" vertex="1">
+                    <mxGeometry x="30" y="110" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp1_box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#FF0000;dashed=1;" parent="match_group" vertex="1">
+                    <mxGeometry x="20" y="100" width="28" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp1_real" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FF0000;strokeColor=none;" parent="match_group" vertex="1">
+                    <mxGeometry x="38" y="114" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp2_ghost" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=none;" parent="match_group" vertex="1">
+                    <mxGeometry x="110" y="30" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp2_box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#FF0000;dashed=1;" parent="match_group" vertex="1">
+                    <mxGeometry x="100" y="20" width="28" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp2_real" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FF0000;strokeColor=none;" parent="match_group" vertex="1">
+                    <mxGeometry x="102" y="36" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp3_ghost" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;" parent="match_group" vertex="1">
+                    <mxGeometry x="70" y="70" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp3_box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#FF0000;dashed=1;" parent="match_group" vertex="1">
+                    <mxGeometry x="60" y="60" width="28" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="mp3_real" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FF0000;strokeColor=none;" parent="match_group" vertex="1">
+                    <mxGeometry x="75" y="63" width="8" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="match_label" value="Rectangular Pattern Match" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" parent="match_group" vertex="1">
+                    <mxGeometry y="190" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="match_detail" value="&amp;forall; p &amp;in; P: dist(p, match(p)) &amp;le; &amp;epsilon;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="match_group" vertex="1">
+                    <mxGeometry y="175" width="160" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
