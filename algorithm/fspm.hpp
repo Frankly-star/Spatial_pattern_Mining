@@ -209,16 +209,15 @@ inline std::vector<RectangularPattern> fspm(
             for (size_t idx : matchIndices) {
                 processed[idx] = true;
             }
-            std::cout << "\n[FSPM] Pattern found with " << matchIndices.size() << " instances." << std::endl;
         } else {
             // 不频繁则继续，只标记当前 i 处理过
             processed[i] = true;
         }
     }
     std::cout << std::endl;
-    for(const auto& pattern : R) {
-        std::cout << pattern.toString() << std::endl;
-    }
+    // for(const auto& pattern : R) {
+    //     std::cout << pattern.toString() << std::endl;
+    // }
 
     return R;
 }
